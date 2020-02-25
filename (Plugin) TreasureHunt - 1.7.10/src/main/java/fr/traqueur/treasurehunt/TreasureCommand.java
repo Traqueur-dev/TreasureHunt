@@ -13,7 +13,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.google.common.collect.Lists;
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldedit.bukkit.selections.Selection;
 
+import fr.traqueur.treasurehunt.api.utils.Cuboid;
 import fr.traqueur.treasurehunt.api.utils.ItemBuilder;
 import fr.traqueur.treasurehunt.api.utils.Utils;
 import fr.traqueur.treasurehunt.api.utils.commands.CommandArgs;
@@ -323,6 +326,7 @@ public class TreasureCommand {
 					+ "§c§l● §e/cat set location\n"
 					+ "§c§l● §e/cat set reward\n"
 					+ "§c§l● §e/cat set inventory\n"
+					+ "§c§l● §e/cat set map\n"
 					+ Utils.LINE);
 			return;
 		}
@@ -407,6 +411,22 @@ public class TreasureCommand {
 			}
 			manager.openInventoryEvent(player);
 			break;
+		case "map":
+			if (args.length() > 1) {
+				player.sendMessage("§cUsage: /cat set map");
+				return;
+			}
+			Selection selection = ((WorldEditPlugin) Bukkit.getPluginManager().getPlugin("WorldEdit")).getSelection(player);
+			Location minimumPoint = new Location(player.getWorld(),
+			                (double) selection.getMinimumPoint().getBlockX(), (double) selection.getMinimumPoint().getBlockY(),
+			                (double) selection.getMinimumPoint().getBlockZ());
+			Location maximumPoint = new Location(player.getWorld(),
+			                (double) selection.getMaximumPoint().getBlockX(), (double) selection.getMaximumPoint().getBlockY(),
+			                (double) selection.getMaximumPoint().getBlockZ());
+			
+			configManager.getConfig().setMap(new Cuboid(minimumPoint, maximumPoint));
+			player.sendMessage(plugin.getPrefix() + "§eVous venez de modifer la §cmap §ede l'évènement.");
+			break;
 		default:
 			player.sendMessage(Utils.LINE
 					+ "§c§l● §e/cat set commun\n"
@@ -415,6 +435,7 @@ public class TreasureCommand {
 					+ "§c§l● §e/cat set location\n"
 					+ "§c§l● §e/cat set reward\n"
 					+ "§c§l● §e/cat set inventory\n"
+					+ "§c§l● §e/cat set map\n"
 					+ Utils.LINE);
 			return;
 		}

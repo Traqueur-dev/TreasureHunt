@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.google.common.collect.Lists;
 
+import fr.traqueur.treasurehunt.api.utils.Cuboid;
 import fr.traqueur.treasurehunt.api.utils.ItemBuilder;
 import lombok.Data;
 
@@ -33,6 +34,7 @@ public class Configuration {
 	
 	/* Inventory */
 	private ItemStack[] inventory;
+	private Cuboid map;
 	/* Rewards */
 	private List<ItemStack> itemsReward;
 	private double moneyReward;
@@ -52,6 +54,7 @@ public class Configuration {
 		this.cristalEpic = new ItemBuilder(Material.DIAMOND).setName("§5Cristal Epique").toItemStack();
 		
 		this.inventory = new ItemStack[40];
+		this.map = new Cuboid("world", 199,100,197,167,124,235);
 		
 		this.itemsReward = Lists.newArrayList();
 		itemsReward.add(new ItemBuilder(Material.DIRT).setName("§c§lTEST").setLore("§6Cette item est un test.").toItemStack());
