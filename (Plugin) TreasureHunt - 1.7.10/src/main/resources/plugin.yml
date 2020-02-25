@@ -1,0 +1,4 @@
+main: fr.traqueur.treasurehunt.TreasurePlugin
+author: Traqueur_
+version: ${project.version}
+name: ${project.name}
