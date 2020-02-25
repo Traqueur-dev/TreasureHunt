@@ -1,6 +1,7 @@
 fr\traqueur\treasurehunt\api\utils\jsons\adapters\ItemStackAdapter.class
 fr\traqueur\treasurehunt\TreasureListener.class
 fr\traqueur\treasurehunt\api\utils\commands\BukkitCompleter.class
+fr\traqueur\treasurehunt\api\utils\NumberUtils.class
 fr\traqueur\treasurehunt\api\utils\commands\annontations\Completer.class
 fr\traqueur\treasurehunt\api\utils\VaultUtils.class
 fr\traqueur\treasurehunt\api\utils\ItemBuilder.class
@@ -23,5 +24,6 @@ fr\traqueur\treasurehunt\event\TreasureState.class
 fr\traqueur\treasurehunt\api\utils\jsons\JsonPersist.class
 fr\traqueur\treasurehunt\api\utils\jsons\Saveable.class
 fr\traqueur\treasurehunt\api\utils\commands\CommandFramework.class
+fr\traqueur\treasurehunt\api\utils\Cuboid.class
 fr\traqueur\treasurehunt\api\utils\jsons\adapters\GsonAdapter.class
 fr\traqueur\treasurehunt\api\utils\commands\annontations\Command.class

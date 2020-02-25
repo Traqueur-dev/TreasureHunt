@@ -47,7 +47,7 @@ public class TreasureEvent implements Runnable {
 			if (TreasureEvent.timeUntilStart == 0) {
 				Bukkit.broadcastMessage(prefix + "§eLancement de l'évènement §cimminent§e.");
 				for (Entry<Player, Location> elem : manager.getLastLocations().entrySet()) {
-					manager.setupInventory(elem.getKey());
+					manager.launchEvent(elem.getKey());
 				}
 				TreasurePlugin.getInstance().getTreasureManager().setState(TreasureState.PLAY);
 			}

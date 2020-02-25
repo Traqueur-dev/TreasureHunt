@@ -16,7 +16,9 @@ import org.bukkit.inventory.ItemStack;
 
 import com.google.common.collect.Lists;
 
+import fr.traqueur.treasurehunt.api.utils.Cuboid;
 import fr.traqueur.treasurehunt.api.utils.ItemBuilder;
+import fr.traqueur.treasurehunt.api.utils.NumberUtils;
 import fr.traqueur.treasurehunt.api.utils.VaultUtils;
 import fr.traqueur.treasurehunt.api.utils.jsons.Saveable;
 import fr.traqueur.treasurehunt.config.ConfigurationManager;
@@ -102,7 +104,6 @@ public class TreasureManager extends Saveable {
 		ItemStack[] inv = lastInventories.get(player);
 		
 		player.teleport(lastLocations.get(player));
-		this.lastLocations.remove(player);
 		for (int i = 0; i < 36; i++) {player.getInventory().setItem(i, inv[i]);}
 		if (inv[36] != null) {player.getInventory().setHelmet(inv[36]);}
 		if (inv[37] != null) {player.getInventory().setChestplate(inv[37]);}
@@ -133,7 +134,12 @@ public class TreasureManager extends Saveable {
 		player.openInventory(inv);
 	}
 	
-	public void setupInventory(Player player) {
+	public void launchEvent(Player player) {
+		this.setupInventory(player);
+		this.randomTP(player);
+	}
+	
+	private void setupInventory(Player player) {
 		ItemStack[] items = configManager.getConfig().getInventory();
 		player.getInventory().setHelmet(items[0]);
 		player.getInventory().setChestplate(items[1]);
@@ -145,6 +151,16 @@ public class TreasureManager extends Saveable {
 			}
 		}
 		
+	}
+	
+	private void randomTP(Player player) {
+		Cuboid cuboid = configManager.getConfig().getMap();
+		Location min = cuboid.getLowerLocation();
+		Location max = cuboid.getUpperLocation();
+		double x = NumberUtils.random(min.getX(), max.getX());
+		double z = NumberUtils.random(min.getZ(), max.getZ());
+		double y = player.getWorld().getHighestBlockYAt((int) x, (int) z) + 1d;
+		player.teleport(new Location(player.getWorld(), x, y, z));
 	}
 	
 	public void setClassement() {

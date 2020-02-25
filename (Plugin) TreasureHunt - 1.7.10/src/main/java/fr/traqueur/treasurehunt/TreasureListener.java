@@ -104,6 +104,7 @@ public class TreasureListener implements Listener {
 		Player player = event.getPlayer();
 		if (!manager.getLastLocations().containsKey(player)) {return;}
 		manager.leaveEvent(player);
+		manager.getLastLocations().remove(player);
 	}
 	
 	
