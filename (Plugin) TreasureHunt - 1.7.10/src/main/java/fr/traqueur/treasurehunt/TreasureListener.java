@@ -6,11 +6,14 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.Inventory;
@@ -19,12 +22,49 @@ import org.bukkit.inventory.ItemStack;
 import com.google.common.collect.Lists;
 
 import fr.traqueur.treasurehunt.config.ConfigurationManager;
+import fr.traqueur.treasurehunt.event.TreasureState;
 
 public class TreasureListener implements Listener {
 
 	private TreasurePlugin plugin = TreasurePlugin.getInstance();
 	private ConfigurationManager configManager = plugin.getConfigManager();
 	private TreasureManager manager = plugin.getTreasureManager();
+	
+	
+	@EventHandler
+	public void onFoodChange(FoodLevelChangeEvent event) {
+		Player player = (Player) event.getEntity();
+		if (manager.getLastLocations().containsKey(player) && manager.getState() == TreasureState.WAIT) {
+			player.setFoodLevel(20);
+			event.setCancelled(true);
+		}
+	}
+	
+	@EventHandler
+	public void onHealChange(EntityDamageEvent event) {
+		if (!(event.getEntity() instanceof Player)) {return;}
+		Player player = (Player) event.getEntity();
+		if (manager.getLastLocations().containsKey(player) && manager.getState() == TreasureState.WAIT) {
+			player.setHealth(20d);
+			event.setCancelled(true);
+		}
+	}
+	
+	@EventHandler
+	public void onBlockBreak(BlockBreakEvent event) {
+		Player player = (Player) event.getPlayer();
+		if (manager.getLastLocations().containsKey(player) && manager.getState() != TreasureState.FINISH) {
+			event.setCancelled(true);
+		}
+	}
+	
+	@EventHandler
+	public void onBlockPlace(BlockPlaceEvent event) {
+		Player player = (Player) event.getPlayer();
+		if (manager.getLastLocations().containsKey(player) && manager.getState() != TreasureState.FINISH) {
+			event.setCancelled(true);
+		}
+	}
 	
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent event) {

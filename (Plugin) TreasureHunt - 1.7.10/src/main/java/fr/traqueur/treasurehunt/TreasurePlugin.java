@@ -36,7 +36,7 @@ public class TreasurePlugin extends JavaPlugin {
 	private Gson gson;
 	
 	private String prefix;
-	//TODO: Generation chest, randomtp player and listener salle d'attente
+	//TODO: Generation chest
 	@Override
 	public void onEnable() {
 		TreasurePlugin.instance = this;
