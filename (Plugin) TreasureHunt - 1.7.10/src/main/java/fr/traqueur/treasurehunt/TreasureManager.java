@@ -38,7 +38,6 @@ public class TreasureManager extends Saveable {
 	private HashMap<Player, Location> lastLocations;
 	private HashMap<Player, ItemStack[]> lastInventories;
 	
-	private List<Player> classement;
 	private UUID idWinner;
 	private boolean rewardHasTake;
 	
@@ -49,7 +48,6 @@ public class TreasureManager extends Saveable {
 		this.lastInventories = new HashMap<>();
 		this.lastLocations = new HashMap<>();
 		this.rewardHasTake = true;
-		this.classement = Lists.newArrayList();
 		this.configManager = TreasurePlugin.getInstance().getConfigManager();
 	}
 
@@ -75,9 +73,7 @@ public class TreasureManager extends Saveable {
 	}
 	
 	public void addPoints(Player player, int points) {
-		int lastPoints = this.players.get(player);
-		this.players.remove(player);
-		this.players.put(player, lastPoints+points);
+		this.players.computeIfPresent(player, (p,i) -> i+points);
 	}
 	
 	public void joinEvent(Player player) {
@@ -165,23 +161,25 @@ public class TreasureManager extends Saveable {
 	
 	public void setClassement() {
 		if (this.players.size() == 0) {return;}
+		
 		StringBuilder builder = new StringBuilder();
+		List<Player> classement = Lists.newArrayList();
 		this.players.entrySet()
 		  .stream()
 		  .sorted(Map.Entry.comparingByValue())
 		  .forEach(e -> {
-			  this.classement.add(e.getKey());
+			  classement.add(e.getKey());
 			  });
-		this.idWinner = this.classement.get(this.classement.size()-1).getUniqueId();
+		this.idWinner = classement.get(classement.size()-1).getUniqueId();
 		
-		int size = this.classement.size() == 1 ? 0 : this.classement.size() - 1;
-		for (int i = 0; i < ((this.classement.size() >= 10) ? 10 : this.classement.size()); i++) {
-			Player player = this.classement.get(size - i);
+		int size = classement.size() == 1 ? 0 : classement.size() - 1;
+		for (int i = 0; i < ((classement.size() >= 10) ? 10 : classement.size()); i++) {
+			Player player = classement.get(size - i);
 			builder.append("§c#" + (i + 1) + " §7§l- §e" + player.getName() + " §7(§e" + this.players.get(player) + " §6points§7)\n");
 		}
 		Bukkit.broadcastMessage(builder.toString());
-		for (int i = 0; i < this.classement.size(); i++) {
-			Player player = this.classement.get(size - i);
+		for (int i = 0; i < classement.size(); i++) {
+			Player player = classement.get(size - i);
 			player.sendMessage("§aVous §eêtes §c" + (i + 1) + ((i == 0) ? "er" : "ème") + " §edans le classement.");
 		}
 	}

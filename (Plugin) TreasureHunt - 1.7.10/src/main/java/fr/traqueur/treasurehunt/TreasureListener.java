@@ -10,6 +10,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.Inventory;
@@ -24,7 +25,6 @@ public class TreasureListener implements Listener {
 	private TreasurePlugin plugin = TreasurePlugin.getInstance();
 	private ConfigurationManager configManager = plugin.getConfigManager();
 	private TreasureManager manager = plugin.getTreasureManager();
-	
 	
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent event) {
