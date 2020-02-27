@@ -36,7 +36,7 @@ public class TreasurePlugin extends JavaPlugin {
 	private Gson gson;
 	
 	private String prefix;
-	//TODO: Generation chest
+	//TODO: remove chest in map in finish
 	@Override
 	public void onEnable() {
 		TreasurePlugin.instance = this;

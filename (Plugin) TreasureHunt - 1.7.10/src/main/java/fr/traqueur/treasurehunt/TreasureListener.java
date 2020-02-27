@@ -3,18 +3,18 @@ package fr.traqueur.treasurehunt;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -32,38 +32,49 @@ public class TreasureListener implements Listener {
 	
 	
 	@EventHandler
-	public void onFoodChange(FoodLevelChangeEvent event) {
-		Player player = (Player) event.getEntity();
-		if (manager.getLastLocations().containsKey(player) && manager.getState() == TreasureState.WAIT) {
-			player.setFoodLevel(20);
-			event.setCancelled(true);
+	public void onChestOpen(PlayerInteractEvent event) {
+		if (!event.hasBlock()) {return;}
+		Block block = event.getClickedBlock();
+		Player player = event.getPlayer();
+		if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {return;}
+		if (!configManager.getConfig().getMap().contains(block.getLocation())) {return;}
+		if (manager.getState() != TreasureState.PLAY) {return;}
+		if (!(block.getState() instanceof Chest)) {return;}
+		Chest chest = (Chest) block.getState();
+		ItemStack[] contents = chest.getInventory().getContents();
+		ItemStack commun = configManager.getConfig().getCristalCommun();
+		ItemStack rare = configManager.getConfig().getCristalRare();
+		ItemStack epic = configManager.getConfig().getCristalEpic();
+		int nbCommun = 0, nbRare = 0, nbEpic = 0;
+		
+		for (ItemStack item : contents) {
+			if (item != null) {
+				if (item.getItemMeta().getDisplayName().equals(commun.getItemMeta().getDisplayName())) {
+					nbCommun++;
+					manager.addPoints(player, configManager.getConfig().getPointCommun());
+				}
+				if (item.getItemMeta().getDisplayName().equals(rare.getItemMeta().getDisplayName())) {
+					nbRare++;
+					manager.addPoints(player, configManager.getConfig().getPointRare());
+				}
+				if (item.getItemMeta().getDisplayName().equals(epic.getItemMeta().getDisplayName())) {
+					nbEpic++;
+					manager.addPoints(player, configManager.getConfig().getPointEpic());
+				}
+			}
 		}
-	}
-	
-	@EventHandler
-	public void onHealChange(EntityDamageEvent event) {
-		if (!(event.getEntity() instanceof Player)) {return;}
-		Player player = (Player) event.getEntity();
-		if (manager.getLastLocations().containsKey(player) && manager.getState() == TreasureState.WAIT) {
-			player.setHealth(20d);
-			event.setCancelled(true);
+		if (nbCommun != 0) {
+			player.sendMessage(plugin.getPrefix() + "§eVous venez de ramasser §7x" + nbCommun + (nbCommun == 1 ? " §ecristal §b§lcommun§e." : " §ecristaux §b§lcommuns§e."));
 		}
-	}
-	
-	@EventHandler
-	public void onBlockBreak(BlockBreakEvent event) {
-		Player player = (Player) event.getPlayer();
-		if (manager.getLastLocations().containsKey(player) && manager.getState() != TreasureState.FINISH) {
-			event.setCancelled(true);
+		if (nbRare != 0) {
+			player.sendMessage(plugin.getPrefix() + "§eVous venez de ramasser §7x" + nbRare + (nbRare == 1 ? " §ecristal §6§lrare§e." : " §ecristaux §6§lrares§e."));
 		}
-	}
-	
-	@EventHandler
-	public void onBlockPlace(BlockPlaceEvent event) {
-		Player player = (Player) event.getPlayer();
-		if (manager.getLastLocations().containsKey(player) && manager.getState() != TreasureState.FINISH) {
-			event.setCancelled(true);
+		if (nbEpic != 0) {
+			player.sendMessage(plugin.getPrefix() + "§eVous venez de ramasser §7x" + nbEpic + (nbEpic == 1 ? " §ecristal §5§lépique§e." : " §ecristaux §5§lépiques§e."));
 		}
+		
+		chest.getInventory().clear();
+		block.setType(Material.AIR);
 	}
 	
 	@EventHandler

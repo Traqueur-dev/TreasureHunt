@@ -4,12 +4,14 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -60,6 +62,41 @@ public class TreasureManager extends Saveable {
 	@Override
 	public void saveData() {}
 
+	private void generateChests() {
+		Cuboid cuboid = this.configManager.getConfig().getMap();
+		int nbChests = this.configManager.getConfig().getNbChests();
+		Location min = cuboid.getLowerLocation();
+		Location max = cuboid.getUpperLocation();
+		double pourcentEpic = configManager.getConfig().getPourcentEpic();
+		double pourcentRare = configManager.getConfig().getPourcentRare();
+		double pourcentCommun = configManager.getConfig().getPourcentCommun();
+		
+		for (int i = 0; i < nbChests; i++) {
+			double x = NumberUtils.random(min.getX(), max.getX());
+			double z = NumberUtils.random(min.getZ(), max.getZ());
+			double y = cuboid.getWorld().getHighestBlockYAt((int) x, (int) z);
+			Location chestLoc = new Location(cuboid.getWorld(), x, y, z);
+			chestLoc.getBlock().setType(Material.CHEST);
+			Chest chest = (Chest) chestLoc.getBlock().getState();
+			Inventory inv = chest.getInventory();
+			int nbItems = NumberUtils.random(1, configManager.getConfig().getNbItemMax());
+			
+			for (int j = 0; j < nbItems; j++) {
+				int slot = NumberUtils.random(0, 26);
+				double pourcent = NumberUtils.random(0d, 100d);
+				
+				if (pourcent <= pourcentEpic) {
+					inv.setItem(slot, configManager.getConfig().getCristalEpic());
+				} else if (pourcent <= pourcentEpic + pourcentRare && pourcent > pourcentEpic) {
+					inv.setItem(slot, configManager.getConfig().getCristalRare());
+				} else if (pourcent <= pourcentEpic + pourcentRare + pourcentCommun && pourcent > pourcentEpic + pourcentRare){
+					inv.setItem(slot, configManager.getConfig().getCristalCommun());
+				}
+				
+			}
+		}
+	}
+	
 	public void getReward(Player player) {
 		Inventory inv = Bukkit.createInventory(null, 54, "§eRécompense de §6§ll'évènement");
 		for (ItemStack itemStack : TreasurePlugin.getInstance().getConfigManager().getConfig().getItemsReward()) {
@@ -130,9 +167,16 @@ public class TreasureManager extends Saveable {
 		player.openInventory(inv);
 	}
 	
-	public void launchEvent(Player player) {
-		this.setupInventory(player);
-		this.randomTP(player);
+	public void launchEvent() {
+		long time = System.currentTimeMillis();
+		this.generateChests();
+		time = System.currentTimeMillis() - time;
+		Bukkit.broadcastMessage(this.getPlugin().getPrefix() + " §eGénération des §ccoffres §aterminée§e. §7(" + time + "ms)");
+	
+		for (Entry<Player, Location> elem : this.getLastLocations().entrySet()) {
+			this.setupInventory(elem.getKey());
+			this.randomTP(elem.getKey());
+		}
 	}
 	
 	private void setupInventory(Player player) {

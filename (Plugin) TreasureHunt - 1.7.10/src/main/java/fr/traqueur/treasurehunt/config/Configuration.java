@@ -32,6 +32,12 @@ public class Configuration {
 	private ItemStack cristalRare;
 	private ItemStack cristalEpic;
 	
+	/* Spawn Cristaux */
+	private int nbItemMax;
+	private double pourcentCommun;
+	private double pourcentRare;
+	private double pourcentEpic;
+	
 	/* Inventory */
 	private ItemStack[] inventory;
 	private Cuboid map;
@@ -52,6 +58,11 @@ public class Configuration {
 		this.cristalCommun = new ItemBuilder(Material.IRON_INGOT).setName("§bCristal Commun").toItemStack();
 		this.cristalRare = new ItemBuilder(Material.GOLD_INGOT).setName("§6Cristal Rare").toItemStack();
 		this.cristalEpic = new ItemBuilder(Material.DIAMOND).setName("§5Cristal Epique").toItemStack();
+		
+		this.nbItemMax = 5;
+		this.pourcentCommun = 70d;
+		this.pourcentRare = 20d;
+		this.pourcentEpic = 10d;
 		
 		this.inventory = new ItemStack[40];
 		this.map = new Cuboid("world", 199,100,197,167,124,235);
