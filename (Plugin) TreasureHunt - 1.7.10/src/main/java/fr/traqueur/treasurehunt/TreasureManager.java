@@ -173,7 +173,7 @@ public class TreasureManager extends Saveable {
 		long time = System.currentTimeMillis();
 		this.generateChests();
 		time = System.currentTimeMillis() - time;
-		Bukkit.broadcastMessage(this.getPlugin().getPrefix() + " §eGénération des §ccoffres §aterminée§e. §7(" + time + "ms)");
+		Bukkit.broadcastMessage(this.getPlugin().getPrefix() + "§eGénération des §ccoffres §aterminée§e. §7(" + time + "ms)");
 	
 		for (Entry<Player, Location> elem : this.getLastLocations().entrySet()) {
 			this.setupInventory(elem.getKey());
