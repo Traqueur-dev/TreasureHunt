@@ -5,6 +5,7 @@ import java.io.File;
 import fr.traqueur.treasurehunt.TreasurePlugin;
 import lombok.Getter;
 import net.minecraft.util.com.google.gson.Gson;
+import fr.traqueur.treasurehunt.api.utils.jsons.JsonPersist;
 
 public abstract class Saveable implements JsonPersist {
 
