@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -21,6 +22,7 @@ import com.google.common.collect.Lists;
 import fr.traqueur.treasurehunt.api.utils.Cuboid;
 import fr.traqueur.treasurehunt.api.utils.ItemBuilder;
 import fr.traqueur.treasurehunt.api.utils.NumberUtils;
+import fr.traqueur.treasurehunt.api.utils.Utils;
 import fr.traqueur.treasurehunt.api.utils.VaultUtils;
 import fr.traqueur.treasurehunt.api.utils.jsons.Saveable;
 import fr.traqueur.treasurehunt.config.ConfigurationManager;
@@ -181,6 +183,7 @@ public class TreasureManager extends Saveable {
 	
 	private void setupInventory(Player player) {
 		ItemStack[] items = configManager.getConfig().getInventory();
+		player.getInventory().clear();
 		player.getInventory().setHelmet(items[0]);
 		player.getInventory().setChestplate(items[1]);
 		player.getInventory().setLeggings(items[2]);
@@ -201,6 +204,30 @@ public class TreasureManager extends Saveable {
 		double z = NumberUtils.random(min.getZ(), max.getZ());
 		double y = player.getWorld().getHighestBlockYAt((int) x, (int) z) + 1d;
 		player.teleport(new Location(player.getWorld(), x, y, z));
+	}
+	
+	public void clearMap() {
+		Cuboid cuboid = configManager.getConfig().getMap();
+		long time = System.currentTimeMillis();
+		for (int x = cuboid.getLowerX(); x <= cuboid.getUpperX() ; x++) {
+			for (int z = cuboid.getLowerZ(); z <= cuboid.getUpperZ(); z++) {
+				for (int y = cuboid.getLowerY(); y < cuboid.getUpperY(); y++) {
+					Location loc = new Location(cuboid.getWorld(), x, y, z);
+					Block block = loc.getBlock();
+					if (block.getType() == Material.CHEST) {
+						Chest chest = (Chest) block.getState();
+						chest.getInventory().clear();
+						block.setType(Material.AIR);
+					}
+				}
+			}
+		}
+		time = System.currentTimeMillis() - time;
+		for (Player p : Utils.getOnlinePlayers()) {
+			if (p.hasPermission("cat.start")) {
+				p.sendMessage(this.getPlugin().getPrefix() + "§eMap §cnettoyée §een §7" + time + "ms§e.");
+			}
+		}
 	}
 	
 	public void setClassement() {

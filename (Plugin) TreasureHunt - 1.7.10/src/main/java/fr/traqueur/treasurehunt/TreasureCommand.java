@@ -154,6 +154,7 @@ public class TreasureCommand {
 		TreasurePlugin.getInstance().getTreasureManager().getLastInventories().clear();
 		TreasurePlugin.getInstance().getTreasureManager().getLastLocations().clear();
 		manager.setCurrentIntTask(0);
+		manager.clearMap();
 	}
 	
 	@Command(name = "cat.save", permission = "cat.save", inGameOnly = true)
@@ -192,12 +193,14 @@ public class TreasureCommand {
 					+ "§c§l● §e/cat change epic §6<point>\n"
 					+ "§c§l● §e/cat change money §6<amount>\n"
 					+ "§c§l● §e/cat change nbchest §6<amount>\n"
+					+ "§c§l● §e/cat change time §6<timeInSecond>\n"
+					+ "§c§l● §e/cat change waiting §6<timeInSecond>\n"
 					+ Utils.LINE);
 			return;
 		}
 		
 		String subCommand = args.getArgs(0);
-		int pointCommun,pointRare,pointEpic, nbChest;
+		int pointCommun,pointRare,pointEpic, nbChest, time, wait;
 		double money;
 		switch (subCommand) {
 		case "cristaux":
@@ -301,6 +304,39 @@ public class TreasureCommand {
 				player.sendMessage("§cErreur, la quantité de coffres doit être un entier.");
 			}
 			return;
+		case "time":
+			if (args.length() < 2) {
+				player.sendMessage("§cUsage: /cat change time <timeInSecond>");
+				return;
+			}
+			
+			try {
+				time = Integer.parseInt(args.getArgs(1));
+				
+				configManager.getConfig().setTimeEventInSecond(time);
+				player.sendMessage(plugin.getPrefix() + "§eVous venez de modifier la §cdurée §ede l'évènement à §a" + time + "§e secondes.");
+				
+			} catch (Exception e) {
+				player.sendMessage("§cErreur, le temps doit être un entier.");
+			}
+			return;
+		case "wating":
+		case "wait":
+			if (args.length() < 2) {
+				player.sendMessage("§cUsage: /cat change wating <timeInSecond>");
+				return;
+			}
+			
+			try {
+				wait = Integer.parseInt(args.getArgs(1));
+				
+				configManager.getConfig().setTimeUntilEventStartInSecond(wait);
+				player.sendMessage(plugin.getPrefix() + "§eVous venez de modifier la §cdurée d'attente §ede l'évènement à §a" + wait + "§e secondes.");
+				
+			} catch (Exception e) {
+				player.sendMessage("§cErreur, le temps doit être un entier.");
+			}
+			return;
 		default:
 			player.sendMessage(Utils.LINE
 					+ "§c§l● §e/cat change cristaux §6<point> <point> <point>\n"
@@ -309,6 +345,8 @@ public class TreasureCommand {
 					+ "§c§l● §e/cat change epic §6<point>\n"
 					+ "§c§l● §e/cat change money §6<amount>\n"
 					+ "§c§l● §e/cat change nbchest §6<amount>\n"
+					+ "§c§l● §e/cat change time §6<time>\n"
+					+ "§c§l● §e/cat change waiting §6<time>\n"
 					+ Utils.LINE);
 			return;
 		}

@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import fr.traqueur.treasurehunt.TreasureManager;
 import fr.traqueur.treasurehunt.TreasurePlugin;
+import fr.traqueur.treasurehunt.event.TreasureState;
 import lombok.Setter;
 
 public class TreasureEvent implements Runnable {
@@ -26,6 +27,10 @@ public class TreasureEvent implements Runnable {
 	@Override
 	public void run() {
 		if (manager.getState() == TreasureState.WAIT) {
+			if (TreasureEvent.timeUntilStart % 60 == 0 && TreasureEvent.timeUntilStart >= 60) {
+				Bukkit.broadcastMessage(
+						prefix + "§eL'évènement se lance dans §c" + TreasureEvent.timeUntilStart/60 + " §eminutes.");
+			}
 			if (TreasureEvent.timeUntilStart == 30) {
 				Bukkit.broadcastMessage(
 						prefix + "§eL'évènement se lance dans §c" + TreasureEvent.timeUntilStart + " §esecondes.");
@@ -41,7 +46,7 @@ public class TreasureEvent implements Runnable {
 
 			if (TreasureEvent.timeUntilStart <= 5 && TreasureEvent.timeUntilStart != 0) {
 				Bukkit.broadcastMessage(
-						prefix + "§eL'évènement se lance dans §c" + TreasureEvent.timeUntilStart + " §esecondes.");
+						prefix + "§eL'évènement se lance dans §c" + TreasureEvent.timeUntilStart + (TreasureEvent.timeEvent > 1 ? " §esecondes." : " §eseconde."));
 			}
 
 			if (TreasureEvent.timeUntilStart == 0) {
@@ -60,13 +65,29 @@ public class TreasureEvent implements Runnable {
 				TreasureEvent.stop();
 			}
 			
-			Bukkit.broadcastMessage("" + timeEvent);
+			if (TreasureEvent.timeEvent % (5*60) == 0 && TreasureEvent.timeEvent >= 60) {
+				Bukkit.broadcastMessage(prefix + "§eIl reste §c" + TreasureEvent.timeEvent/60 + "§e minutes.");
+			}
+			if (TreasureEvent.timeEvent == 30) {
+				Bukkit.broadcastMessage(prefix + "§eIl reste §c" + TreasureEvent.timeEvent + "§e secondes, avant la fin de la chasse.");
+			}
+			if (TreasureEvent.timeEvent == 20) {
+				Bukkit.broadcastMessage(prefix + "§eIl reste §c" + TreasureEvent.timeEvent + "§e secondes, avant la fin de la chasse.");
+			}
+			if (TreasureEvent.timeEvent == 10) {
+				Bukkit.broadcastMessage(prefix + "§eIl reste §c" + TreasureEvent.timeEvent + "§e secondes, avant la fin de la chasse.");
+			}
+
+			if (TreasureEvent.timeEvent <= 5 && TreasureEvent.timeEvent != 0) {
+				Bukkit.broadcastMessage(prefix + "§eIl reste §c" + (TreasureEvent.timeEvent > 1 ? TreasureEvent.timeEvent + "§e secondes, avant la fin de la chasse." : TreasureEvent.timeEvent + "§e seconde, avant la fin de la chasse."));
+			}
 			TreasureEvent.timeEvent--;
 		}
 		
 		if (timeEvent == 0) {
 			Bukkit.broadcastMessage(prefix + "§cL'évènement §eest terminé. Voici le §aTOP 10§e:");
 			TreasureEvent.stop();
+			
 		}
 	}
 
@@ -81,10 +102,11 @@ public class TreasureEvent implements Runnable {
 			}
 		}
 		
-		
 		TreasurePlugin.getInstance().getTreasureManager().setClassement();
 		TreasurePlugin.getInstance().getTreasureManager().getPlayers().clear();
 		TreasurePlugin.getInstance().getTreasureManager().getLastInventories().clear();
 		TreasurePlugin.getInstance().getTreasureManager().getLastLocations().clear();
+		
+		manager.clearMap();
 	}
 }
