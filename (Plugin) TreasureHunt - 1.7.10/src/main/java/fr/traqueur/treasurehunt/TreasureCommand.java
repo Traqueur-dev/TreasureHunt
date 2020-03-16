@@ -121,7 +121,7 @@ public class TreasureCommand {
 		manager.setCurrentIntTask(task);
 		Bukkit.broadcastMessage(
 				prefix + "§6L'évènement Chasse aux trésors commencera dans §6§l" + timeUntilStart/60 + " §6minutes."
-						+ "\n§6Faîtes la commande §6§l/cat join §6pour rejoindre l'événement");
+						+ "\n§6Faîtes la commande §c§l/cat join §6pour rejoindre l'événement");
 	}
 	
 	@Command(name = "cat.startnow", permission = "cat.startnow", inGameOnly = true)
