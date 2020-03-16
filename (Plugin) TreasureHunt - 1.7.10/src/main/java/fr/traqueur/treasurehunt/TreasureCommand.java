@@ -36,17 +36,17 @@ public class TreasureCommand {
 	public void onHelp(CommandArgs args) {
 		Player player = args.getPlayer();
 		player.sendMessage(Utils.LINE
-				+ "§eListe des §ccommandes§e:\n"
-				+ "§c§l● §e/cat infos\n"
-				+ "§c§l● §e/cat reward\n"
-				+ "§c§l● §e/cat join\n"
-				+ "§c§l● §e/cat leave\n"
-				+ "§c§l● §e/cat change\n"
-				+ "§c§l● §e/cat set\n"
-				+ "§c§l● §e/cat start\n"
-				+ "§c§l● §e/cat startnow\n"
-				+ "§c§l● §e/cat stop\n"
-				+ "§c§l● §e/cat save\n"
+				+ "§6Liste des §ccommandes§e:\n"
+				+ "§c§l● §6/cat infos\n"
+				+ "§c§l● §6/cat reward\n"
+				+ "§c§l● §6/cat join\n"
+				+ "§c§l● §6/cat leave\n"
+				+ "§c§l● §6/cat change\n"
+				+ "§c§l● §6/cat set\n"
+				+ "§c§l● §6/cat start\n"
+				+ "§c§l● §6/cat startnow\n"
+				+ "§c§l● §6/cat stop\n"
+				+ "§c§l● §6/cat save\n"
 				+ Utils.LINE);
 	}
 	
@@ -63,7 +63,7 @@ public class TreasureCommand {
 		}
 		
 		manager.joinEvent(player);
-		player.sendMessage(TreasurePlugin.getInstance().getPrefix() + "§aVous §evenez de rejoindre l'évènement.");
+		player.sendMessage(TreasurePlugin.getInstance().getPrefix() + "§aVous §6venez de rejoindre l'évènement.");
 	}
 	
 	@Command(name = "cat.leave", inGameOnly = true)
@@ -82,7 +82,7 @@ public class TreasureCommand {
 		manager.getPlayers().remove(player);
 		manager.getLastInventories().remove(player);
 		manager.getLastLocations().remove(player);
-		player.sendMessage(TreasurePlugin.getInstance().getPrefix() + "§aVous §evenez de quitter l'évènement.");
+		player.sendMessage(TreasurePlugin.getInstance().getPrefix() + "§aVous §6venez de quitter l'évènement.");
 	}
 	
 	@Command(name = "cat.infos", aliases = {"cat.info"}, inGameOnly = true)
@@ -100,7 +100,7 @@ public class TreasureCommand {
 		int size = top.size() == 1 ? 0 : top.size() - 1;
 		for (int i = 0; i < ((top.size() >= 5) ? 5 : top.size()); i++) {
 			Player p = top.get(size - i);
-			builder.append("§c#" + (i + 1) + " §7§l- §e" + p.getName() + " §7(§e" + players.get(p) + " §6points§7)\n");
+			builder.append("§6§l#" + (i + 1) + " §7§l- §e" + p.getName() + " §7(§6" + players.get(p) + " §6§lpoints§7)\n");
 		}
 		
 		player.sendMessage(Utils.LINE + builder.toString() + Utils.LINE);
@@ -119,6 +119,9 @@ public class TreasureCommand {
 		manager.setState(TreasureState.WAIT);
 		int task = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new TreasureEvent(timeUntilStart), 0, 20);
 		manager.setCurrentIntTask(task);
+		Bukkit.broadcastMessage(
+				prefix + "§6L'évènement Chasse aux trésors commencera dans §6§l" + timeUntilStart/60 + " §6minutes."
+						+ "\n§6Faîtes la commande §6§l/cat join §6pour rejoindre l'événement");
 	}
 	
 	@Command(name = "cat.startnow", permission = "cat.startnow", inGameOnly = true)
@@ -139,7 +142,7 @@ public class TreasureCommand {
 			return;
 		}
 		
-		Bukkit.broadcastMessage(this.prefix + "§c" + player.getName() + " §evient de stopper volontairement l'évènement.");
+		Bukkit.broadcastMessage(this.prefix + "§c" + player.getName() + " §6vient de stoper volontairement l'évènement.");
 		TreasurePlugin.getInstance().getServer().getScheduler().cancelTask(manager.getCurrentIntTask());
 		TreasurePlugin.getInstance().getTreasureManager().setState(TreasureState.FINISH);
 		
@@ -163,7 +166,7 @@ public class TreasureCommand {
 		long time = System.currentTimeMillis();
 		plugin.savePersists();
 		time = System.currentTimeMillis() - time;
-		Bukkit.broadcastMessage("§7[§6Sauvegarde§7] §eSauvegarde des §cdonnées §eeffectuée par §6" + player.getName() + " §eréussie. §7("+time+"ms)");
+		Bukkit.broadcastMessage(this.prefix +"§6Sauvegarde des §6§ldonnées §6effectuée par §6§l" + player.getName() + " §6réussie. §7("+time+"ms)");
 	}
 	
 	@Command(name = "cat.reward", inGameOnly = true)
@@ -187,14 +190,14 @@ public class TreasureCommand {
 		Player player = args.getPlayer();
 		if (args.length() < 1) {
 			player.sendMessage(Utils.LINE
-					+ "§c§l● §e/cat change cristaux §6<point> <point> <point>\n"
-					+ "§c§l● §e/cat change commun §6<point>\n"
-					+ "§c§l● §e/cat change rare §6<point>\n"
-					+ "§c§l● §e/cat change epic §6<point>\n"
-					+ "§c§l● §e/cat change money §6<amount>\n"
-					+ "§c§l● §e/cat change nbchest §6<amount>\n"
-					+ "§c§l● §e/cat change time §6<timeInSecond>\n"
-					+ "§c§l● §e/cat change waiting §6<timeInSecond>\n"
+					+ "§c§l● §6/cat change cristaux §6§l<point> <point> <point>\n"
+					+ "§c§l● §6/cat change commun §6§l<point>\n"
+					+ "§c§l● §6/cat change rare §6§l<point>\n"
+					+ "§c§l● §6/cat change epic §6§l<point>\n"
+					+ "§c§l● §6/cat change money §6§l<amount>\n"
+					+ "§c§l● §6/cat change nbchest §6§l<amount>\n"
+					+ "§c§l● §6/cat change time §6§l<timeInSecond>\n"
+					+ "§c§l● §6/cat change waiting §6§l<timeInSecond>\n"
 					+ Utils.LINE);
 			return;
 		}
@@ -217,7 +220,7 @@ public class TreasureCommand {
 				configManager.getConfig().setPointCommun(pointCommun);
 				configManager.getConfig().setPointRare(pointRare);
 				configManager.getConfig().setPointEpic(pointEpic);
-				player.sendMessage(plugin.getPrefix() + "§eVous venez de modifier les §cvaleurs §edes cristaux.");
+				player.sendMessage(plugin.getPrefix() + "§6Vous venez de modifier les §6§lvaleurs §6des cristaux.");
 				
 			} catch (Exception e) {
 				player.sendMessage("§cErreur, les valeurs des points doit être des entiers.");
@@ -234,7 +237,7 @@ public class TreasureCommand {
 				pointCommun = Integer.parseInt(args.getArgs(1));
 				
 				configManager.getConfig().setPointCommun(pointCommun);
-				player.sendMessage(plugin.getPrefix() + "§eVous venez de modifier la §cvaleur §edes cristaux communs à §a" + pointCommun + " §epoints.");
+				player.sendMessage(plugin.getPrefix() + "§6Vous venez de modifier la §6§lvaleur §edes cristaux communs à §a" + pointCommun + " §6points.");
 				
 			} catch (Exception e) {
 				player.sendMessage("§cErreur, les valeurs des points d'avoir être un entier.");
@@ -250,7 +253,7 @@ public class TreasureCommand {
 				pointRare = Integer.parseInt(args.getArgs(1));
 				
 				configManager.getConfig().setPointRare(pointRare);
-				player.sendMessage(plugin.getPrefix() + "§eVous venez de modifier la §cvaleur §edes cristaux rares à §a" + pointRare + " §epoints.");
+				player.sendMessage(plugin.getPrefix() + "§6Vous venez de modifier la §6§lvaleur §6des cristaux rares à §a" + pointRare + " §6points.");
 				
 			} catch (Exception e) {
 				player.sendMessage("§cErreur, les valeurs des points doit être un entier.");
@@ -266,7 +269,7 @@ public class TreasureCommand {
 				pointEpic = Integer.parseInt(args.getArgs(1));
 				
 				configManager.getConfig().setPointRare(pointEpic);
-				player.sendMessage(plugin.getPrefix() + "§eVous venez de modifier la §cvaleur §edes cristaux épiques à §a" + pointEpic + " §epoints.");
+				player.sendMessage(plugin.getPrefix() + "§6Vous venez de modifier la §6§lvaleur §6des cristaux épiques à §a" + pointEpic + " §6points.");
 				
 			} catch (Exception e) {
 				player.sendMessage("§cErreur, les valeurs des points doit être un entier.");
@@ -282,7 +285,7 @@ public class TreasureCommand {
 				money = Double.parseDouble(args.getArgs(1));
 				
 				configManager.getConfig().setMoneyReward(money);
-				player.sendMessage(plugin.getPrefix() + "§eVous venez de modifier la §cmoney §een récompense à " + money + "§e$.");
+				player.sendMessage(plugin.getPrefix() + "§6Vous venez de modifier la §6§lmoney §6en récompense à " + money + "§6$.");
 				
 			} catch (Exception e) {
 				player.sendMessage("§cErreur, les valeurs de la money doit être un nombre.");
@@ -298,7 +301,7 @@ public class TreasureCommand {
 				nbChest = Integer.parseInt(args.getArgs(1));
 				
 				configManager.getConfig().setNbChests(nbChest);
-				player.sendMessage(plugin.getPrefix() + "§eVous venez de modifier le §cnombre de coffres §edurant l'évènement à " + nbChest + "§e$.");
+				player.sendMessage(plugin.getPrefix() + "§6Vous venez de modifier le §6§lnombre de coffres §6durant l'évènement à " + nbChest + "§6$.");
 				
 			} catch (Exception e) {
 				player.sendMessage("§cErreur, la quantité de coffres doit être un entier.");
@@ -314,7 +317,7 @@ public class TreasureCommand {
 				time = Integer.parseInt(args.getArgs(1));
 				
 				configManager.getConfig().setTimeEventInSecond(time);
-				player.sendMessage(plugin.getPrefix() + "§eVous venez de modifier la §cdurée §ede l'évènement à §a" + time + "§e secondes.");
+				player.sendMessage(plugin.getPrefix() + "§6Vous venez de modifier la §6§ldurée §6de l'évènement à §a" + time + "§6 secondes.");
 				
 			} catch (Exception e) {
 				player.sendMessage("§cErreur, le temps doit être un entier.");
@@ -331,7 +334,7 @@ public class TreasureCommand {
 				wait = Integer.parseInt(args.getArgs(1));
 				
 				configManager.getConfig().setTimeUntilEventStartInSecond(wait);
-				player.sendMessage(plugin.getPrefix() + "§eVous venez de modifier la §cdurée d'attente §ede l'évènement à §a" + wait + "§e secondes.");
+				player.sendMessage(plugin.getPrefix() + "§6Vous venez de modifier la §6§ldurée d'attente §6de l'évènement à §a" + wait + "§6 secondes.");
 				
 			} catch (Exception e) {
 				player.sendMessage("§cErreur, le temps doit être un entier.");
@@ -339,14 +342,14 @@ public class TreasureCommand {
 			return;
 		default:
 			player.sendMessage(Utils.LINE
-					+ "§c§l● §e/cat change cristaux §6<point> <point> <point>\n"
-					+ "§c§l● §e/cat change commun §6<point>\n"
-					+ "§c§l● §e/cat change rare §6<point>\n"
-					+ "§c§l● §e/cat change epic §6<point>\n"
-					+ "§c§l● §e/cat change money §6<amount>\n"
-					+ "§c§l● §e/cat change nbchest §6<amount>\n"
-					+ "§c§l● §e/cat change time §6<time>\n"
-					+ "§c§l● §e/cat change waiting §6<time>\n"
+					+ "§c§l● §6/cat change cristaux §6§l<point> <point> <point>\n"
+					+ "§c§l● §6/cat change commun §6§l<point>\n"
+					+ "§c§l● §6/cat change rare §6§l<point>\n"
+					+ "§c§l● §6/cat change epic §6§l<point>\n"
+					+ "§c§l● §6/cat change money §6§l<amount>\n"
+					+ "§c§l● §6/cat change nbchest §6§l<amount>\n"
+					+ "§c§l● §6/cat change time §6§l<time>\n"
+					+ "§c§l● §6/cat change waiting §6§l<time>\n"
 					+ Utils.LINE);
 			return;
 		}
@@ -358,13 +361,13 @@ public class TreasureCommand {
 		Player player = args.getPlayer();
 		if (args.length() < 1) {
 			player.sendMessage(Utils.LINE
-					+ "§c§l● §e/cat set commun\n"
-					+ "§c§l● §e/cat set rare\n"
-					+ "§c§l● §e/cat set epic\n"
-					+ "§c§l● §e/cat set location\n"
-					+ "§c§l● §e/cat set reward\n"
-					+ "§c§l● §e/cat set inventory\n"
-					+ "§c§l● §e/cat set map\n"
+					+ "§c§l● §6/cat set commun\n"
+					+ "§c§l● §6/cat set rare\n"
+					+ "§c§l● §6/cat set epic\n"
+					+ "§c§l● §6/cat set location\n"
+					+ "§c§l● §6/cat set reward\n"
+					+ "§c§l● §6/cat set inventory\n"
+					+ "§c§l● §6/cat set map\n"
 					+ Utils.LINE);
 			return;
 		}
@@ -384,7 +387,7 @@ public class TreasureCommand {
 			newCristal = new ItemBuilder(item).setName("§bCristal Commun").toItemStack();
 			this.configManager.getConfig().setCristalCommun(newCristal);
 			player.getInventory().setItemInHand(null);
-			player.sendMessage(plugin.getPrefix() + "§eVous venez de modifier le §ccristal §b§lcommun§e.");
+			player.sendMessage(plugin.getPrefix() + "§6Vous venez de modifier le §6§lcristal §b§lcommun§e.");
 			break;
 		case "rare":
 			if (args.length() > 1) {
@@ -399,7 +402,7 @@ public class TreasureCommand {
 			newCristal = new ItemBuilder(item).setName("§6Cristal Rare").toItemStack();
 			this.configManager.getConfig().setCristalRare(newCristal);
 			player.getInventory().setItemInHand(null);
-			player.sendMessage(plugin.getPrefix() + "§eVous venez de modifier le §ccristal §6§lrare§e.");
+			player.sendMessage(plugin.getPrefix() + "§6Vous venez de modifier le §6§lcristal §6§lrare§e.");
 			break;
 		case "epic":
 			if (args.length() > 1) {
@@ -414,7 +417,7 @@ public class TreasureCommand {
 			newCristal = new ItemBuilder(item).setName("§5Cristal Epique").toItemStack();
 			this.configManager.getConfig().setCristalEpic(newCristal);
 			player.getInventory().setItemInHand(null);
-			player.sendMessage(plugin.getPrefix() + "§eVous venez de modifier le §ccristal §5§lépique§e.");
+			player.sendMessage(plugin.getPrefix() + "§6Vous venez de modifier le §6§lcristal §5§lépique§e.");
 			break;
 		case "location":
 		case "loc":
@@ -425,7 +428,7 @@ public class TreasureCommand {
 			
 			Location loc = player.getLocation();
 			configManager.getConfig().setZoneTeleportAttente(loc);
-			player.sendMessage(plugin.getPrefix() + "§eVous venez de modifer la §czone de téléportation §epour la salle d'attente de l'évènement.");
+			player.sendMessage(plugin.getPrefix() + "§6Vous venez de modifer la §6§lzone de téléportation §6pour la salle d'attente de l'évènement.");
 			return;
 		case "reward":
 			if (args.length() > 1) {
@@ -463,17 +466,17 @@ public class TreasureCommand {
 			                (double) selection.getMaximumPoint().getBlockZ());
 			
 			configManager.getConfig().setMap(new Cuboid(minimumPoint, maximumPoint));
-			player.sendMessage(plugin.getPrefix() + "§eVous venez de modifer la §cmap §ede l'évènement.");
+			player.sendMessage(plugin.getPrefix() + "§6Vous venez de modifer la §6§lmap §6de l'évènement.");
 			break;
 		default:
 			player.sendMessage(Utils.LINE
-					+ "§c§l● §e/cat set commun\n"
-					+ "§c§l● §e/cat set rare\n"
-					+ "§c§l● §e/cat set epic\n"
-					+ "§c§l● §e/cat set location\n"
-					+ "§c§l● §e/cat set reward\n"
-					+ "§c§l● §e/cat set inventory\n"
-					+ "§c§l● §e/cat set map\n"
+					+ "§c§l● §6/cat set commun\n"
+					+ "§c§l● §6/cat set rare\n"
+					+ "§c§l● §6/cat set epic\n"
+					+ "§c§l● §6/cat set location\n"
+					+ "§c§l● §6/cat set reward\n"
+					+ "§c§l● §6/cat set inventory\n"
+					+ "§c§l● §6/cat set map\n"
 					+ Utils.LINE);
 			return;
 		}

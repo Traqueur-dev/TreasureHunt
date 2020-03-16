@@ -106,8 +106,8 @@ public class TreasureManager extends Saveable {
 		}
 		
 		player.openInventory(inv);
-		player.sendMessage(TreasurePlugin.getInstance().getPrefix() + "§eVous venez de récupérez vos §crécompenses§e." +
-							"\n§cNe fermez pas l'inventaire sans récupérer les items, ils seront perdus.");
+		player.sendMessage(TreasurePlugin.getInstance().getPrefix() + "§6Vous venez de récupérez vos §6§lrécompenses§6." +
+							"\n§6§lNe fermez pas l'inventaire sans récupérer les items, ils seront perdus.");
 		VaultUtils.depositMoney(player, TreasurePlugin.getInstance().getConfigManager().getConfig().getMoneyReward());
 	}
 	
@@ -173,7 +173,7 @@ public class TreasureManager extends Saveable {
 		long time = System.currentTimeMillis();
 		this.generateChests();
 		time = System.currentTimeMillis() - time;
-		Bukkit.broadcastMessage(this.getPlugin().getPrefix() + "§eGénération des §ccoffres §aterminée§e. §7(" + time + "ms)");
+		Bukkit.broadcastMessage(this.getPlugin().getPrefix() + "§6Génération des §6§lcoffres §aterminée§6. §7(" + time + "ms)");
 	
 		for (Entry<Player, Location> elem : this.getLastLocations().entrySet()) {
 			this.setupInventory(elem.getKey());
@@ -225,7 +225,7 @@ public class TreasureManager extends Saveable {
 		time = System.currentTimeMillis() - time;
 		for (Player p : Utils.getOnlinePlayers()) {
 			if (p.hasPermission("cat.start")) {
-				p.sendMessage(this.getPlugin().getPrefix() + "§eMap §cnettoyée §een §7" + time + "ms§e.");
+				p.sendMessage(this.getPlugin().getPrefix() + "§6Map §6§lnettoyée §6en §7" + time + "ms§6.");
 			}
 		}
 	}
@@ -246,12 +246,12 @@ public class TreasureManager extends Saveable {
 		int size = classement.size() == 1 ? 0 : classement.size() - 1;
 		for (int i = 0; i < ((classement.size() >= 10) ? 10 : classement.size()); i++) {
 			Player player = classement.get(size - i);
-			builder.append("§c#" + (i + 1) + " §7§l- §e" + player.getName() + " §7(§e" + this.players.get(player) + " §6points§7)\n");
+			builder.append("§6§l#" + (i + 1) + " §7§l- §6" + player.getName() + " §7(§6" + this.players.get(player) + " §cpoints§7)\n");
 		}
 		Bukkit.broadcastMessage(builder.toString());
 		for (int i = 0; i < classement.size(); i++) {
 			Player player = classement.get(size - i);
-			player.sendMessage("§aVous §eêtes §c" + (i + 1) + ((i == 0) ? "er" : "ème") + " §edans le classement.");
+			player.sendMessage("§aVous §6êtes §6§l" + (i + 1) + ((i == 0) ? "er" : "ème") + " §6dans le classement.");
 		}
 	}
 	

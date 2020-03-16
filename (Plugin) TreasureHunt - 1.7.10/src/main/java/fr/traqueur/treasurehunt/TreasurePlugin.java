@@ -40,7 +40,7 @@ public class TreasurePlugin extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		TreasurePlugin.instance = this;
-		this.prefix = "§7[§6TreasureHunt§7] ";
+		this.prefix = "§9[§9§lCAT§9] ";
 		
 		this.gson = this.createGsonBuilder().create();
 		this.persists = Lists.newArrayList();

@@ -64,13 +64,13 @@ public class TreasureListener implements Listener {
 			}
 		}
 		if (nbCommun != 0) {
-			player.sendMessage(plugin.getPrefix() + "§eVous venez de ramasser §7x" + nbCommun + (nbCommun == 1 ? " §ecristal §b§lcommun§e." : " §ecristaux §b§lcommuns§e."));
+			player.sendMessage(plugin.getPrefix() + "§6Vous venez de ramasser §7x" + nbCommun + (nbCommun == 1 ? " §6cristal §b§lcommun§6." : " §6cristaux §b§lcommuns§6."));
 		}
 		if (nbRare != 0) {
-			player.sendMessage(plugin.getPrefix() + "§eVous venez de ramasser §7x" + nbRare + (nbRare == 1 ? " §ecristal §6§lrare§e." : " §ecristaux §6§lrares§e."));
+			player.sendMessage(plugin.getPrefix() + "§6Vous venez de ramasser §7x" + nbRare + (nbRare == 1 ? " §6cristal §6§lrare§6." : " §6cristaux §6§lrares§6."));
 		}
 		if (nbEpic != 0) {
-			player.sendMessage(plugin.getPrefix() + "§eVous venez de ramasser §7x" + nbEpic + (nbEpic == 1 ? " §ecristal §5§lépique§e." : " §ecristaux §5§lépiques§e."));
+			player.sendMessage(plugin.getPrefix() + "§6Vous venez de ramasser §7x" + nbEpic + (nbEpic == 1 ? " §6cristal §5§lépique§6." : " §6cristaux §5§lépiques§6."));
 		}
 		
 		chest.getInventory().clear();
@@ -79,7 +79,7 @@ public class TreasureListener implements Listener {
 	
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent event) {
-		if (!event.getInventory().getName().equals("§eGestion §dInventaire")) {return;}
+		if (!event.getInventory().getName().equals("§6Gestion §dInventaire")) {return;}
 		if (!event.getCurrentItem().hasItemMeta()) {return;}
 		if (!event.getCurrentItem().getItemMeta().hasDisplayName()) {return;}
 		if (event.getCurrentItem().getItemMeta().getDisplayName().equals(" ") && event.getCurrentItem().getType() == Material.STAINED_GLASS_PANE) {
@@ -100,7 +100,7 @@ public class TreasureListener implements Listener {
 				}
 			}
 			configManager.getConfig().setItemsReward(itemsReward);
-			player.sendMessage(plugin.getPrefix() + "§eVous venez de modifier les §citems §een récompenses.");
+			player.sendMessage(plugin.getPrefix() + "§6Vous venez de modifier les §6§litems §6en récompenses.");
 			return;
 		}
 		
@@ -118,7 +118,7 @@ public class TreasureListener implements Listener {
 				configManager.getConfig().getInventory()[j] = inv.getContents()[i];
 				j++;
 			}
-			player.sendMessage(plugin.getPrefix() + "§eVous venez de modifier les items de §cl'inventaire§e.");
+			player.sendMessage(plugin.getPrefix() + "§6Vous venez de modifier les items de §6§ll'inventaire§6.");
 		}
 		
 	}

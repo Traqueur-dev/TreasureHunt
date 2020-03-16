@@ -13,7 +13,7 @@ public class ConfigTask implements Runnable {
 		long time = System.currentTimeMillis();
 		plugin.savePersists();
 		time = System.currentTimeMillis() - time;
-		Bukkit.broadcastMessage("§7[§6Sauvegarde§7] §eSauvegarde des §cdonnées §eréussie. §7("+time+"ms)");
+		Bukkit.broadcastMessage(plugin.getPrefix() +"§6Sauvegarde des §6§ldonnées §6réussie. §7("+time+"ms)");
 	}
 
 }
